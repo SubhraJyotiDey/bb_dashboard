@@ -473,7 +473,13 @@ export default function Dashboard() {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {activeTab === 'overview' && <OverviewTab kpi={kpi} inventory={inventory} />}
+        {activeTab === 'overview' && (
+          <OverviewTab 
+            kpi={kpi} 
+            onRegisterDonor={() => setDonationModalOpen(true)}
+            onCheckInAppointment={() => setActiveTab('appointments')}
+          />
+        )}
         {activeTab === 'inventory' && (
           <InventoryTab
             inventory={inventory}

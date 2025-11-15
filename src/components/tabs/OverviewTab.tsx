@@ -1,13 +1,14 @@
-import { KPIData, Inventory } from '@/types/bloodbank';
-import { BLOOD_GROUPS, getInventoryStatus, getStatusColor, getStatusEmoji, getStatusLabel } from '@/lib/bloodbank-utils';
+import { KPIData } from '@/types/bloodbank';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface OverviewTabProps {
   kpi: KPIData;
-  inventory: Inventory;
+  onRegisterDonor: () => void;
+  onCheckInAppointment: () => void;
 }
 
-export const OverviewTab = ({ kpi, inventory }: OverviewTabProps) => {
+export const OverviewTab = ({ kpi, onRegisterDonor, onCheckInAppointment }: OverviewTabProps) => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-primary mb-6">Blood Bank Overview</h2>
@@ -50,46 +51,32 @@ export const OverviewTab = ({ kpi, inventory }: OverviewTabProps) => {
         </Card>
       </div>
 
-      {/* Inventory Summary */}
-      <h3 className="text-xl font-semibold text-foreground mb-4">Inventory Summary</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {BLOOD_GROUPS.map((bg) => {
-          const item = inventory[bg];
-          const status = getInventoryStatus(item.available, item.total);
-          const statusColor = getStatusColor(status);
-
-          return (
-            <Card key={bg} className="p-5 card-hover">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <div className="text-2xl font-bold text-primary">{bg}</div>
-                  <div className="text-sm text-muted-foreground">Blood Group</div>
-                </div>
-                <div className={`status-pill border ${statusColor}`}>
-                  <span>{getStatusEmoji(status)}</span>
-                  <span>{getStatusLabel(status)}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Total:</span>
-                  <span className="font-semibold text-foreground">{item.total}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Available:</span>
-                  <span className="font-semibold text-success">{item.available}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Reserved:</span>
-                  <span className="font-semibold text-warning">
-                    {item.total - item.available}
-                  </span>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+      {/* Process Donor Check-In */}
+      <Card className="p-6 border-t-4 border-t-primary">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <h2 className="text-xl font-bold text-primary">Process Donor Check-In</h2>
+            <p className="text-muted-foreground text-sm">Choose the incoming donor workflow.</p>
+          </div>
+          <div className="flex space-x-3">
+            <Button 
+              onClick={onRegisterDonor}
+              size="lg"
+              className="font-semibold"
+            >
+              ➕ Register New Donor
+            </Button>
+            <Button 
+              onClick={onCheckInAppointment}
+              size="lg"
+              variant="secondary"
+              className="font-semibold"
+            >
+              ⏱️ Check-In Appointment
+            </Button>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
